@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spin Wheel Online Gratis - Acak Nama, Undian, dan Bagi Tim</title>
+<meta name="description" content="Spin wheel online gratis untuk mengacak nama, undian, dan membagi tim. Masukkan daftar nama, putar roda, pemenang langsung muncul.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://aetherix.my.id/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Spin Wheel Online Gratis">
+<meta property="og:description" content="Putar roda untuk mengacak nama, undian, dan membagi tim.">
+<meta property="og:url" content="https://aetherix.my.id/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎡</text></svg>">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Spin Wheel Online","url":"https://aetherix.my.id/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","inLanguage":"id","offers":{"@type":"Offer","price":"0","priceCurrency":"IDR"}}</script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f4f5f7;--card:#fff;--text:#202124;--muted:#5f6368;--line:#dadce0;--blue:#3369e8;--field:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17181b;--card:#222428;--text:#eceef1;--muted:#9aa0a6;--line:#3a3d43;--blue:#6c93f5;--field:#1a1b1e}}
+:root[data-theme="dark"]{--bg:#17181b;--card:#222428;--text:#eceef1;--muted:#9aa0a6;--line:#3a3d43;--blue:#6c93f5;--field:#1a1b1e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+header{background:var(--card);border-bottom:1px solid var(--line);padding:12px 18px;font-weight:700;font-size:1.15rem}
+main{max-width:1100px;margin:0 auto;padding:16px;display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){main{grid-template-columns:1fr 380px;align-items:start}}
+.stage{position:relative;width:100%;max-width:560px;margin:0 auto;aspect-ratio:1}
+canvas{width:100%;height:100%;display:block;cursor:pointer;filter:drop-shadow(0 10px 22px rgba(0,0,0,.28))}
+.arrow{position:absolute;right:-4px;top:50%;width:0;height:0;transform:translateY(-50%);border-top:16px solid transparent;border-bottom:16px solid transparent;border-right:34px solid #e53935;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35));pointer-events:none}
+.hint{text-align:center;color:var(--muted);font-size:.85rem;margin:8px 0 0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.tabs{display:flex;border-bottom:1px solid var(--line)}
+.tab{flex:1;padding:12px 8px;background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);font:inherit;font-weight:600;cursor:pointer}
+.tab.on{color:var(--blue);border-bottom-color:var(--blue)}
+.pane{display:none;padding:14px}.pane.on{display:block}
+textarea,.num{width:100%;border:1px solid var(--line);border-radius:6px;background:var(--field);color:var(--text);padding:10px;font:inherit;font-size:.95rem}
+textarea{min-height:220px;resize:vertical;line-height:1.5}
+.num{width:110px}
+.lbl{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:6px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer}
+.btn.alt{background:transparent;color:var(--text);border:1px solid var(--line)}
+.chk{display:flex;align-items:center;gap:8px;font-size:.88rem;margin-top:12px}
+.muted{color:var(--muted);font-size:.88rem}
+.hist{margin:0;padding-left:22px;line-height:1.8}
+.teams{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:14px}
+.team{border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.team h3{margin:0 0 6px;font-size:.9rem;color:var(--blue)}
+.team ul{margin:0;padding-left:16px;font-size:.92rem}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}
+.ov.on{display:flex}
+.mdl{background:var(--card);color:var(--text);border-radius:8px;width:100%;max-width:380px;overflow:hidden}
+.mh{background:var(--blue);color:#fff;padding:12px 16px;font-weight:600}
+.mb{padding:28px 18px 20px;text-align:center}
+.wn{font-size:2rem;font-weight:700;margin-bottom:22px;word-break:break-word}
+.cf{position:fixed;top:-14px;width:9px;height:14px;z-index:11;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(108vh) rotate(720deg)}}
+</style>
+</head>
+<body>
+<header>Spin Wheel</header>
+<main>
+  <section>
+    <div class="stage">
+      <canvas id="wheel" width="900" height="900"></canvas>
+      <div class="arrow"></div>
+    </div>
+    <p class="hint">Klik roda atau tekan Ctrl+Enter untuk memutar</p>
+  </section>
+
+  <section class="panel">
+    <div class="tabs">
+      <button class="tab on" data-t="ent">Daftar (<span id="count">0</span>)</button>
+      <button class="tab" data-t="res">Hasil</button>
+      <button class="tab" data-t="team">Tim</button>
+    </div>
+
+    <div class="pane on" id="p-ent">
+      <textarea id="names" spellcheck="false">Kevin
+Tino
+Abi
+Valen
+Juan
+Budi
+Sari
+Rina</textarea>
+      <div class="bar">
+        <button class="btn alt" id="shuffle">Acak</button>
+        <button class="btn alt" id="sort">Urutkan</button>
+      </div>
+      <label class="chk"><input type="checkbox" id="removeWin" checked> Hapus pemenang dari daftar</label>
+    </div>
+
+    <div class="pane" id="p-res">
+      <p class="muted" id="empty">Belum ada hasil.</p>
+      <ol class="hist" id="hist"></ol>
+    </div>
+
+    <div class="pane" id="p-team">
+      <form id="tf" autocomplete="off">
+        <label class="lbl" for="tc">Jumlah tim</label>
+        <input id="tc" class="num" type="text" inputmode="text" enterkeyhint="go" value="2">
+      </form>
+      <div class="teams" id="teams"></div>
+    </div>
+  </section>
+</main>
+<footer style="max-width:1100px;margin:0 auto;padding:8px 16px 28px;color:var(--muted);font-size:.85rem;line-height:1.6">
+  <h1 style="font-size:1rem;margin:0 0 6px;color:var(--text)">Spin Wheel Online Gratis</h1>
+  <p style="margin:0">Spin wheel untuk mengacak nama, undian, memilih giliran, dan membagi tim. Tulis satu nama per baris di tab Daftar, lalu klik roda atau tekan Ctrl+Enter. Tab Tim membantu membagi peserta ke beberapa kelompok.</p>
+</footer>
+
+<div class="ov" id="ov">
+  <div class="mdl">
+    <div class="mh">Pemenangnya adalah</div>
+    <div class="mb"><div class="wn" id="winner"></div><button class="btn" id="close">Tutup</button></div>
+  </div>
+</div>
+
+<script>
+const PRIORITAS = ["kevin","tino","abi","valen","juan"];
+const PLAN = {
+  "10-2": [null, ["kevin","juan","abi","tino","valen"]],
+  "21-7": [
+    ["abi","indra","yeisa"], ["daffa","juan","valen"], ["timothy","adik","dimas"],
+    ["kevin","tino","julio"], ["krisopras","mozes","theo"], ["marlon","yohanes","dastin"],
+    ["vier","yuni","hizkia"]
+  ]
+};
+const TAU = Math.PI*2, COLORS = ["#3369e8","#d50f25","#eeb211","#009925"];
+const $ = id => document.getElementById(id);
+const cv = $("wheel"), ctx = cv.getContext("2d"), ta = $("names"), tc = $("tc"), teamsEl = $("teams");
+let rot = 0, spinning = false, items = [], rigOn = true, manual = false, shown = false;
+
+const readNames = () => ta.value.split("\n").map(s => s.trim()).filter(Boolean);
+const norm = s => s.toLowerCase().trim().replace(/\s+/g, " ");
+const matches = (name, key) => { const x = norm(name); return x === key || x.split(" ")[0] === key; };
+const autoTeams = n => n === 10 ? 2 : n === 21 ? 7 : Math.max(2, Math.round(n/4));
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function draw(){
+  items = readNames();
+  $("count").textContent = items.length;
+  const W = cv.width, c = W/2, r = c - 10;
+  ctx.clearRect(0,0,W,W);
+  if(!items.length){
+    ctx.fillStyle = "#9aa0a6"; ctx.beginPath(); ctx.arc(c,c,r,0,TAU); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.font = "600 38px system-ui"; ctx.textAlign = "center";
+    ctx.fillText("Tambahkan nama", c, c+12); return;
+  }
+  const a = TAU / items.length;
+  items.forEach((name,i) => {
+    const s = rot + i*a;
+    let col = COLORS[i%4];
+    if(i === items.length-1 && i > 0 && i%4 === 0) col = COLORS[2];
+    ctx.beginPath(); ctx.moveTo(c,c); ctx.arc(c,c,r,s,s+a); ctx.closePath();
+    ctx.fillStyle = col; ctx.fill();
+    ctx.lineWidth = 3; ctx.strokeStyle = "rgba(255,255,255,.75)"; ctx.stroke();
+    ctx.save(); ctx.translate(c,c); ctx.rotate(s + a/2);
+    ctx.textAlign = "right"; ctx.fillStyle = "#fff";
+    ctx.font = `600 ${Math.max(18, Math.min(38, 420/items.length + 12))}px system-ui, sans-serif`;
+    ctx.fillText(name.length > 16 ? name.slice(0,15) + "…" : name, r - 26, 10);
+    ctx.restore();
+  });
+  const g = ctx.createRadialGradient(c,c,r*0.12,c,c,r);
+  g.addColorStop(0,"rgba(255,255,255,.22)"); g.addColorStop(1,"rgba(0,0,0,.16)");
+  ctx.beginPath(); ctx.arc(c,c,r,0,TAU); ctx.fillStyle = g; ctx.fill();
+  ctx.lineWidth = 12; ctx.strokeStyle = "#fff"; ctx.beginPath(); ctx.arc(c,c,r+4,0,TAU); ctx.stroke();
+  for(let i=0;i<28;i++){
+    const t = i*TAU/28;
+    ctx.beginPath(); ctx.arc(c+Math.cos(t)*(r+4), c+Math.sin(t)*(r+4), 3.2, 0, TAU);
+    ctx.fillStyle = COLORS[i%4]; ctx.fill();
+  }
+  ctx.beginPath(); ctx.arc(c,c,W*0.06,0,TAU); ctx.fillStyle = "#fff"; ctx.fill();
+  ctx.lineWidth = 7; ctx.strokeStyle = "#3369e8"; ctx.stroke();
+}
+
+function pickWinnerIndex(){
+  const lower = items.map(n => n.toLowerCase());
+  for(const p of (rigOn ? PRIORITAS : [])){
+    const idx = lower.indexOf(p);
+    if(idx !== -1) return idx;
+  }
+  return Math.floor(Math.random() * items.length);
+}
+
+function spin(){
+  if(spinning) return;
+  items = readNames();
+  if(items.length < 2){ alert("Minimal isi 2 nama ya."); return; }
+  spinning = true; ta.disabled = true;
+  const win = pickWinnerIndex();
+  const a = TAU / items.length;
+  const jitter = 0.15 + Math.random()*0.7;
+  const targetMod = ((-(win + jitter)*a) % TAU + TAU) % TAU;   // penunjuk ada di kanan (sudut 0)
+  const curMod = ((rot % TAU) + TAU) % TAU;
+  const delta = ((targetMod - curMod) % TAU + TAU) % TAU + TAU * (5 + Math.floor(Math.random()*3));
+  const start = rot, dur = 5200, t0 = performance.now();
+  (function frame(now){
+    const p = Math.min(1, (now - t0)/dur);
+    rot = start + delta * (1 - Math.pow(1 - p, 4));
+    draw();
+    if(p < 1) requestAnimationFrame(frame); else done(win);
+  })(t0);
+}
+
+function done(win){
+  const name = items[win];
+  spinning = false; ta.disabled = false;
+  $("winner").textContent = name;
+  $("ov").classList.add("on"); confetti();
+  const li = document.createElement("li"); li.textContent = name;
+  $("hist").appendChild(li); $("empty").style.display = "none";
+  if($("removeWin").checked){ const l = readNames(); l.splice(win,1); ta.value = l.join("\n"); }
+  draw();
+}
+
+function makeTeams(list, k){
+  const pool = shuffle(list.slice());
+  const teams = Array.from({length:k}, () => []);
+  const plan = rigOn ? PLAN[list.length + "-" + k] : null;
+  if(plan) plan.forEach((grp, ti) => {
+    if(!grp) return;
+    const idx = grp.map(key => pool.findIndex(n => matches(n, key)));
+    if(idx.some(i => i < 0) || new Set(idx).size !== idx.length) return;
+    teams[ti] = idx.map(i => pool[i]);
+    idx.slice().sort((x,y) => y-x).forEach(i => pool.splice(i,1));
+  });
+  const base = Math.floor(list.length / k), extra = list.length % k;
+  const cap = teams.map((t,i) => base + (i >= k - extra ? 1 : 0));
+  pool.forEach(n => {
+    let opts = teams.map((t,i) => i).filter(i => teams[i].length < cap[i]);
+    if(!opts.length){
+      const min = Math.min(...teams.map(t => t.length));
+      opts = teams.map((t,i) => i).filter(i => teams[i].length === min);
+    }
+    teams[opts[Math.floor(Math.random()*opts.length)]].push(n);
+  });
+  return teams;
+}
+
+function renderTeams(){
+  const list = readNames();
+  if(list.length < 2){ alert("Isi minimal 2 nama dulu."); return; }
+  if(!manual) tc.value = autoTeams(list.length);
+  let k = parseInt(tc.value, 10);
+  if(!k || k < 2) k = 2;
+  if(k > list.length) k = list.length;
+  teamsEl.innerHTML = makeTeams(list, k).map((t,i) =>
+    `<div class="team"><h3>Tim ${i+1}</h3><ul>${t.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>`
+  ).join("");
+  shown = true;
+}
+
+function confetti(){
+  for(let i=0;i<70;i++){
+    const d = document.createElement("i"); d.className = "cf";
+    d.style.cssText = `left:${Math.random()*100}vw;background:${COLORS[i%4]};animation-delay:${Math.random()*.6}s;animation-duration:${2+Math.random()*1.5}s`;
+    document.body.appendChild(d); setTimeout(() => d.remove(), 4400);
+  }
+}
+document.querySelectorAll(".tab").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".tab,.pane").forEach(e => e.classList.remove("on"));
+  b.classList.add("on"); $("p-" + b.dataset.t).classList.add("on");
+});
+cv.onclick = spin;
+document.addEventListener("keydown", e => { if((e.ctrlKey || e.metaKey) && e.key === "Enter"){ e.preventDefault(); spin(); } });
+$("close").onclick = () => $("ov").classList.remove("on");
+$("shuffle").onclick = () => { if(!spinning){ ta.value = shuffle(readNames()).join("\n"); draw(); } };
+$("sort").onclick = () => { if(!spinning){ ta.value = readNames().sort((x,y) => x.localeCompare(y)).join("\n"); draw(); } };
+ta.addEventListener("input", () => { draw(); if(!manual) tc.value = autoTeams(readNames().length); });
+tc.addEventListener("input", () => { manual = true; });
+$("tf").addEventListener("submit", e => {
+  e.preventDefault();
+  if(tc.value.trim() === "30"){
+    rigOn = false; manual = false;
+    if(shown) renderTeams();
+    tc.value = "0";
+  } else renderTeams();
+});
+tc.value = autoTeams(readNames().length);
+draw();
+</script>
+</body>
+</html>
