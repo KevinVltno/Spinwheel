@@ -92,7 +92,7 @@ textarea{min-height:220px;resize:vertical;line-height:1.5}
     <div class="pane" id="p-team">
       <form id="tf" autocomplete="off">
         <label class="lbl" for="tc">Jumlah tim</label>
-        <input id="tc" class="num" type="text" inputmode="text" enterkeyhint="go" value="2">
+        <input id="tc" class="num" type="text" inputmode="text" enterkeyhint="go" value="0">
       </form>
       <div class="teams" id="teams"></div>
     </div>
@@ -236,9 +236,9 @@ function makeTeams(list, k){
 function renderTeams(){
   const list = readNames();
   if(list.length < 2){ alert("Isi minimal 2 nama dulu."); return; }
-  if(!manual) tc.value = autoTeams(list.length);
-  let k = parseInt(tc.value, 10);
-  if(!k || k < 2) k = 2;
+  let k = manual ? parseInt(tc.value, 10) : 0;
+  if(!k) k = autoTeams(list.length);
+  if(k < 2) k = 2;
   if(k > list.length) k = list.length;
   teamsEl.innerHTML = makeTeams(list, k).map((t,i) =>
     `<div class="team"><h3>Tim ${i+1}</h3><ul>${t.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>`
@@ -262,7 +262,8 @@ document.addEventListener("keydown", e => { if((e.ctrlKey || e.metaKey) && e.key
 $("close").onclick = () => $("ov").classList.remove("on");
 $("shuffle").onclick = () => { if(!spinning){ ta.value = shuffle(readNames()).join("\n"); draw(); } };
 $("sort").onclick = () => { if(!spinning){ ta.value = readNames().sort((x,y) => x.localeCompare(y)).join("\n"); draw(); } };
-ta.addEventListener("input", () => { draw(); if(!manual) tc.value = autoTeams(readNames().length); });
+ta.addEventListener("input", draw);
+tc.addEventListener("focus", () => setTimeout(() => tc.select(), 0));
 tc.addEventListener("input", () => { manual = true; });
 $("tf").addEventListener("submit", e => {
   e.preventDefault();
@@ -272,7 +273,6 @@ $("tf").addEventListener("submit", e => {
     tc.value = "0";
   } else renderTeams();
 });
-tc.value = autoTeams(readNames().length);
 draw();
 </script>
 </body>
